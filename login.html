@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Login | SITTA</title>
+    <!-- Google Fonts untuk tipografi yang lebih segar -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 (gratis) untuk ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        /* efek grid dan blur latar belakang */
+        body::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at 25% 40%, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.08) 50%, transparent 80%);
+            pointer-events: none;
+        }
+
+        /* Kartu utama login */
+        .login-container {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(0px);
+            border-radius: 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.2);
+            width: 100%;
+            max-width: 460px;
+            overflow: hidden;
+            transition: transform 0.25s ease;
+        }
+
+        .login-container:hover {
+            transform: translateY(-4px);
+        }
+
+        /* area header dengan dekorasi */
+        .login-header {
+            background: linear-gradient(120deg, #4f46e5, #7c3aed);
+            padding: 2rem 2rem 2.2rem;
+            text-align: center;
+            color: white;
+        }
+
+        .login-header h1 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            margin-bottom: 0.4rem;
+        }
+
+        .login-header p {
+            font-size: 0.9rem;
+            opacity: 0.85;
+            font-weight: 500;
+        }
+
+        .avatar-icon {
+            background: rgba(255, 255, 255, 0.2);
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem auto;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .avatar-icon i {
+            font-size: 2.8rem;
+            color: white;
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2));
+        }
+
+        /* area form */
+        .login-form {
+            padding: 2rem 2rem 2.2rem;
+        }
+
+        /* Grup input dengan ikon */
+        .input-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 1.2rem;
+            transition: color 0.2s;
+            pointer-events: none;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.9rem 1rem 0.9rem 2.8rem;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 1.2rem;
+            background-color: #ffffff;
+            outline: none;
+            transition: all 0.25s ease;
+            color: #1e293b;
+        }
+
+        .input-group input:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        }
+
+        .input-group input:focus + i {
+            color: #4f46e5;
+        }
+
+        /* Opsi tambahan (remember me & lupa password) */
+        .login-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 1rem 0 1.6rem;
+            font-size: 0.85rem;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            color: #334155;
+            font-weight: 500;
+        }
+
+        .checkbox-label input {
+            width: 16px;
+            height: 16px;
+            accent-color: #4f46e5;
+            cursor: pointer;
+        }
+
+        .forgot-link {
+            color: #4f46e5;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .forgot-link:hover {
+            color: #6d28d9;
+            text-decoration: underline;
+        }
+
+        /* Tombol login */
+        .login-btn {
+            background: linear-gradient(95deg, #4f46e5, #7c3aed);
+            width: 100%;
+            padding: 0.9rem;
+            border: none;
+            border-radius: 1.8rem;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 14px -8px rgba(79, 70, 229, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+        }
+
+        .login-btn i {
+            font-size: 1.1rem;
+            transition: transform 0.2s;
+        }
+
+        .login-btn:hover {
+            background: linear-gradient(95deg, #6366f1, #8b5cf6);
+            transform: scale(1.01);
+            box-shadow: 0 12px 20px -10px rgba(79, 70, 229, 0.5);
+        }
+
+        .login-btn:hover i {
+            transform: translateX(4px);
+        }
+
+        /* Pemisah / alternatif login */
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 1.8rem 0 1.2rem;
+            color: #94a3b8;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .divider::before {
+            margin-right: 0.8rem;
+        }
+
+        .divider::after {
+            margin-left: 0.8rem;
+        }
+
+        /* Tombol sosial media */
+        .social-login {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .social-btn {
+            background: #f1f5f9;
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #334155;
+            font-size: 1.4rem;
+        }
+
+        .social-btn:hover {
+            background: #e2e8f0;
+            transform: translateY(-3px);
+            color: #0f172a;
+        }
+
+        /* link daftar */
+        .signup-prompt {
+            text-align: center;
+            margin-top: 1.8rem;
+            font-size: 0.9rem;
+            color: #475569;
+        }
+
+        .signup-prompt a {
+            color: #4f46e5;
+            text-decoration: none;
+            font-weight: 700;
+            margin-left: 0.3rem;
+            transition: color 0.2s;
+        }
+
+        .signup-prompt a:hover {
+            color: #6d28d9;
+            text-decoration: underline;
+        }
+
+        /* pesan error / demo sederhana (akan tampil via JS kecil) */
+        .demo-message {
+            background: #fee2e2;
+            padding: 0.75rem;
+            border-radius: 1rem;
+            margin-bottom: 1.2rem;
+            color: #b91c1c;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-align: center;
+            display: none;
+            border-left: 5px solid #ef4444;
+        }
+
+        /* responsif untuk HP kecil */
+        @media (max-width: 480px) {
+            .login-container {
+                max-width: 100%;
+            }
+            .login-header {
+                padding: 1.5rem 1rem;
+            }
+            .login-form {
+                padding: 1.7rem;
+            }
+            .login-header h1 {
+                font-size: 1.6rem;
+            }
+        }
+
+        /* animasi fade in */
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-container {
+            animation: fadeSlide 0.45s ease-out;
+        }
+
+        /* styling untuk pesan sukses demo (opsional) */
+        .success-toast {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.2);
+            z-index: 999;
+            display: none;
+            backdrop-filter: blur(8px);
+            background: rgba(30, 41, 59, 0.95);
+            border: 1px solid #334155;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-container">
+    <div class="login-header">
+        <div class="avatar-icon">
+            <i class="fas fa-user-circle"></i>
+        </div>
+        <h1>SITTA</h1><br>
+        <h4>Sistem    Informasi    Tiras    dan Transaksi  Bahan  Ajar</h3><br>
+        <p>UNIVERSITAS TERBUKA</p>
+    </div>
+
+    <div class="login-form">
+        <!-- area pesan feedback (demo) -->
+        <div id="demoMessage" class="demo-message">
+            <i class="fas fa-exclamation-circle" style="margin-right: 6px;"></i> 
+            <span id="errorText">Email atau password salah</span>
+        </div>
+
+        <form id="loginForm" action="#" method="POST">
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="email" name="email" placeholder="Alamat Email" autocomplete="email" required>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="password" name="password" placeholder="Kata Sandi" autocomplete="current-password" required>
+            </div>
+
+            <div class="login-options">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="rememberCheckbox"> Ingat saya
+                </label>
+                <a href="#" class="forgot-link" id="forgotPasswordLink">Lupa password?</a>
+            </div>
+
+            <button type="submit" class="login-btn">
+                <span>Masuk</span> <i class="fas fa-arrow-right"></i>
+            </button>
+        </form>
+</div>
+
+<!-- Toast notifikasi untuk demo -->
+<div id="toastMsg" class="success-toast">
+    <i class="fas fa-check-circle" style="margin-right: 8px;"></i> <span id="toastText">Notifikasi</span>
+</div>
+
+<script>
+    // Fungsi untuk menampilkan pesan error di dalam form
+    function showError(message) {
+        const msgBox = document.getElementById('demoMessage');
+        const errorSpan = document.getElementById('errorText');
+        errorSpan.innerText = message;
+        msgBox.style.display = 'block';
+        // sembunyikan setelah 3.5 detik
+        setTimeout(() => {
+            msgBox.style.display = 'none';
+        }, 3500);
+    }
+
+    // Fungsi untuk menampilkan toast sukses / notifikasi
+    function showToast(message, isSuccess = true) {
+        const toast = document.getElementById('toastMsg');
+        const toastText = document.getElementById('toastText');
+        const iconSpan = toast.querySelector('i');
+        if (isSuccess) {
+            iconSpan.className = 'fas fa-check-circle';
+            toast.style.background = 'rgba(16, 185, 129, 0.95)';
+            toast.style.border = '1px solid #34d399';
+        } else {
+            iconSpan.className = 'fas fa-info-circle';
+            toast.style.background = 'rgba(245, 158, 11, 0.95)';
+            toast.style.border = '1px solid #fbbf24';
+        }
+        toastText.innerText = message;
+        toast.style.display = 'block';
+        setTimeout(() => {
+            toast.style.display = 'none';
+        }, 2800);
+    }
+
+    // Simulasi validasi login (karena ini hanya frontend, credential contoh: admin@example.com / password123)
+    // Namun kita beri fleksibilitas demo: email: demo@mail.com  |  password: rahasia123
+    // atau bisa juga pakai "user@example.com" dan "123456"
+    const validCredentials = [
+        { email: "demo@mail.com", password: "rahasia123" },
+        { email: "user@example.com", password: "123456" },
+        { email: "admin@domain.com", password: "admin123" }
+    ];
+
+    // handle form login
+    const loginForm = document.getElementById('loginForm');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+
+    loginForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = emailInput.value.trim();
+        const password = passwordInput.value.trim();
+
+        if (email === "" || password === "") {
+            showError("Email dan kata sandi harus diisi!");
+            return;
+        }
+
+        // Cek kecocokan dengan credentials demo
+        const isValid = validCredentials.some(cred => cred.email === email && cred.password === password);
+
+        if (isValid) {
+
+    // Simpan data user login
+    localStorage.setItem('isLogin', 'true');
+    localStorage.setItem('currentUserEmail', email);
+
+    // Optional: simpan nama berdasarkan email
+    let userName = "Administrator";
+
+    if (email === "user@example.com") {
+        userName = "Admin Vira";
+    } else if (email === "demo@mail.com") {
+        userName = "Demo User";
+    }
+
+    localStorage.setItem('currentUserName', userName);
+
+    const rememberMe = document.getElementById('rememberCheckbox').checked;
+
+    if (rememberMe) {
+        localStorage.setItem('demo_remember_email', email);
+    } else {
+        localStorage.removeItem('demo_remember_email');
+    }
+
+    showToast("Login berhasil! Selamat datang kembali.", true);
+
+    window.location.href = 'dashboard.html';
+
+} else {
+    showError("Email atau kata sandi salah!");
+}
+    });
+
+    // Tombol lupa password
+    const forgotLink = document.getElementById('forgotPasswordLink');
+    forgotLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        showToast("🔐 Link reset password telah dikirim ke email Anda (fitur demo)", false);
+    });
+
+
+    // Cek local storage untuk "remember me" (opsional: isi otomatis field email)
+    window.addEventListener('DOMContentLoaded', () => {
+        const savedEmail = localStorage.getItem('demo_remember_email');
+        if (savedEmail) {
+            emailInput.value = savedEmail;
+            document.getElementById('rememberCheckbox').checked = true;
+            showToast("Email tersimpan dari kunjungan sebelumnya (Ingat saya aktif)", true);
+        }
+        
+        // menambahkan sedikit interaksi pada password jika kosong, untuk kenyamanan demo tidak perlu autofill password karena alasan keamanan
+        // (tidak menyimpan password secara plain di localStorage dalam demo ini)
+    });
+
+    // validasi client side sederhana secara visual juga ketika blur
+    function markValidation(inputElement, isValid) {
+        if(isValid) {
+            inputElement.style.borderColor = "#cbd5e1";
+            inputElement.style.boxShadow = "none";
+        } else {
+            if(inputElement.value.trim() !== "") {
+                inputElement.style.borderColor = "#f97316";
+                inputElement.style.boxShadow = "0 0 0 2px rgba(249,115,22,0.2)";
+            } else {
+                inputElement.style.borderColor = "#e2e8f0";
+            }
+        }
+    }
+    
+    emailInput.addEventListener('blur', function() {
+        const emailVal = emailInput.value.trim();
+        const isValidEmail = emailVal === "" || (emailVal.includes('@') && emailVal.includes('.'));
+        if(emailVal !== "" && !isValidEmail) {
+            markValidation(emailInput, false);
+            showError("Format email tidak valid (contoh: nama@domain.com)");
+            setTimeout(() => {
+                const msg = document.getElementById('demoMessage');
+                if(msg.style.display === 'block') msg.style.display = 'none';
+            }, 2000);
+        } else {
+            markValidation(emailInput, true);
+        }
+    });
+    
+    passwordInput.addEventListener('blur', function() {
+        if(passwordInput.value.trim() === "") {
+            markValidation(passwordInput, false);
+        } else {
+            markValidation(passwordInput, true);
+        }
+    });
+    
+    // hapus error message saat user mulai mengetik di form
+    const clearErrorOnInput = () => {
+        const msgBox = document.getElementById('demoMessage');
+        if(msgBox.style.display === 'block') {
+            msgBox.style.display = 'none';
+        }
+    };
+    emailInput.addEventListener('input', clearErrorOnInput);
+    passwordInput.addEventListener('input', clearErrorOnInput);
+</script>
+</body>
+</html>

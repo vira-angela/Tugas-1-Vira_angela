@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | SITTA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f1f5f9;
+            min-height: 100vh;
+        }
+
+        /* Navbar / Header */
+        .dashboard-header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo-area h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .logo-area h2 i {
+            color: #8b5cf6;
+        }
+
+        .greeting-area {
+            background: rgba(255,255,255,0.12);
+            padding: 0.6rem 1.2rem;
+            border-radius: 2rem;
+            backdrop-filter: blur(4px);
+        }
+
+        .greeting-area p {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .greeting-area i {
+            margin-right: 0.5rem;
+            color: #fbbf24;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-info span {
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logout-btn:hover {
+            background: #dc2626;
+            transform: scale(1.02);
+        }
+
+        /* Main container */
+        .main-container {
+            display: flex;
+            min-height: calc(100vh - 75px);
+        }
+
+        /* Sidebar Menu */
+        .sidebar {
+            width: 280px;
+            background: white;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+            padding: 2rem 0;
+            transition: all 0.3s;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin: 0.5rem 1rem;
+        }
+
+        .nav-btn {
+            width: 100%;
+            text-align: left;
+            padding: 0.9rem 1.2rem;
+            background: transparent;
+            border: none;
+            border-radius: 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            color: #334155;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-btn i {
+            width: 24px;
+            font-size: 1.2rem;
+            color: #64748b;
+        }
+
+        .nav-btn:hover {
+            background: #f1f5f9;
+            color: #4f46e5;
+            transform: translateX(5px);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(95deg, #eef2ff, #e0e7ff);
+            color: #4f46e5;
+            border-left: 3px solid #4f46e5;
+        }
+
+        .nav-btn.active i {
+            color: #4f46e5;
+        }
+
+        /* Submenu untuk Laporan */
+        .submenu {
+            list-style: none;
+            padding-left: 3.2rem;
+            margin-top: 0.3rem;
+            display: none;
+        }
+
+        .submenu.show {
+            display: block;
+        }
+
+        .submenu-item {
+            margin: 0.3rem 0;
+        }
+
+        .submenu-btn {
+            width: 100%;
+            text-align: left;
+            padding: 0.6rem 1rem;
+            background: transparent;
+            border: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            color: #475569;
+            cursor: pointer;
+            border-radius: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            transition: all 0.2s;
+        }
+
+        .submenu-btn:hover {
+            background: #f8fafc;
+            color: #4f46e5;
+        }
+
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            padding: 2rem;
+            background: #f8fafc;
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 1.5rem;
+            border-left: 5px solid #4f46e5;
+            padding-left: 1rem;
+        }
+
+        .info-placeholder {
+            background: #fefce8;
+            border: 1px solid #fef08a;
+            padding: 2rem;
+            border-radius: 1rem;
+            text-align: center;
+            color: #854d0e;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: #f1f5f9;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .badge {
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                padding: 1rem;
+            }
+            .dashboard-header {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-header">
+    <div class="logo-area">
+        <h2><i class="fas fa-book-open"></i> SITTA</h2>
+    </div>
+    <div class="greeting-area" id="greetingMessage">
+        <p><i class="fas fa-sun"></i> <span id="greetingText">Memuat...</span></p>
+    </div>
+    <div class="user-info">
+        <span id="userNameDisplay">User</span>
+        <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </div>
+</div>
+
+<div class="main-container">
+    <!-- Sidebar Menu -->
+    <div class="sidebar">
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <button class="nav-btn" data-page="bahanajar">
+                    <i class="fas fa-chalkboard-user"></i> Informasi Bahan Ajar
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-btn" data-page="tracking">
+                    <i class="fas fa-truck-fast"></i> Tracking Pengiriman
+                </button>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Dynamic Content Area -->
+    <div class="content-area" id="contentArea">
+        <!-- default content akan diisi oleh JS -->
+    </div>
+</div>
+
+<script>
+    // Cek autentikasi: jika tidak ada sessionStorage, redirect ke login
+    const isLogin = localStorage.getItem('isLogin');
+    if (!isLogin) {
+        window.location.href = 'login.html';
+    }
+    
+const currentUser = {
+    name: localStorage.getItem('currentUserName') || "Administrator",
+    email: localStorage.getItem('currentUserEmail') || "admin@domain.com"
+};    
+    // Tampilkan nama user
+    document.getElementById('userNameDisplay').innerText = currentUser.name || currentUser.email.split('@')[0];
+    
+    // Fungsi greeting berdasarkan waktu lokal
+    function setGreeting() {
+        const now = new Date();
+        const hours = now.getHours();
+        let greeting = "";
+        let icon = "";
+        
+        if (hours >= 5 && hours < 12) {
+            greeting = "Selamat Pagi";
+            icon = "🌅";
+        } else if (hours >= 12 && hours < 15) {
+            greeting = "Selamat Siang";
+            icon = "☀️";
+        } else if (hours >= 15 && hours < 18) {
+            greeting = "Selamat Sore";
+            icon = "🌤️";
+        } else {
+            greeting = "Selamat Malam";
+            icon = "🌙";
+        }
+        
+        document.getElementById('greetingText').innerHTML =
+`${icon} ${greeting}, ${currentUser.email}!`;
+    }
+    setGreeting();
+    
+    // Data dummy untuk konten
+    const dataBahanAjar = [
+    {
+        kodeLokasi: "0TMP01",
+        kodeBarang: "ASIP4301",
+        namaBarang: "Pengantar Ilmu Komunikasi",
+        jenisBarang: "BMP",
+        edisi: "2",
+        stok: 548,
+        cover: "img/pengantar_komunikasi.jpg"
+    },
+    {
+        kodeLokasi: "0JKT01",
+        kodeBarang: "EKMA4216",
+        namaBarang: "Manajemen Keuangan",
+        jenisBarang: "BMP",
+        edisi: "3",
+        stok: 392,
+        cover: "img/manajemen_keuangan.jpg"
+    },
+    {
+        kodeLokasi: "0SBY02",
+        kodeBarang: "EKMA4310",
+        namaBarang: "Kepemimpinan",
+        jenisBarang: "BMP",
+        edisi: "1",
+        stok: 278,
+        cover: "img/kepemimpinan.jpg"
+    },
+    {
+        kodeLokasi: "0MLG01",
+        kodeBarang: "BIOL4211",
+        namaBarang: "Mikrobiologi Dasar",
+        jenisBarang: "BMP",
+        edisi: "2",
+        stok: 165,
+        cover: "img/mikrobiologi.jpg"
+    },
+    {
+        kodeLokasi: "0UPBJJBDG",
+        kodeBarang: "PAUD4401",
+        namaBarang: "Perkembangan Anak Usia Dini",
+        jenisBarang: "BMP",
+        edisi: "4",
+        stok: 204,
+        cover: "img/paud_perkembangan.jpeg"
+    }
+];
+    
+    var dataTracking = {
+  "2023001234": {
+    nomorDO: "2023001234",
+    nama: "Rina Wulandari",
+    status: "Dalam Perjalanan",
+    ekspedisi: "JNE",
+    tanggalKirim: "2025-08-25",
+    paket: "0JKT01",
+    total: "Rp 180.000",
+    perjalanan:[
+      {
+        waktu: "2025-08-25 10:12:20",
+        keterangan: "Penerimaan di Loket: TANGERANG SELATAN. Pengirim: Universitas Terbuka"
+      },
+      {
+        waktu: "2025-08-25 14:07:56",
+        keterangan: "Tiba di Hub: TANGERANG SELATAN"
+      },      
+      {
+        waktu: "2025-08-25 10:12:20",
+        keterangan: "Diteruskan ke Kantor Jakarta Selatan"
+      }
+    ]
+  },
+
+  "2023005678": {
+    nomorDO: "2023005678",
+    nama: "Agus Pranoto",
+    status: "Dikirim",
+    ekspedisi: "Pos Indonesia",
+    tanggalKirim: "2025-08-25",
+    paket: "0UPBJJBDG",
+    total: "Rp 220.000",
+    perjalanan:[
+      {
+        waktu: "2025-08-25 10:12:20",
+        keterangan: "Penerimaan di Loket: TANGERANG SELATAN. Pengirim: Universitas Terbuka"
+      },
+      {
+        waktu: "2025-08-25 14:07:56",
+        keterangan: "Tiba di Hub: TANGERANG SELATAN"
+      },      
+      {
+        waktu: "2025-08-25 16:30:10",
+        keterangan: "Diteruskan ke Kantor Kota Bandung"
+      },
+      {
+        waktu: "2025-08-26 12:15:33",
+        keterangan: "Tiba di Hub: Kota BANDUNG"
+      },
+      {
+        waktu: "2025-08-26 15:06:12",
+        keterangan: "Proses antar ke Cimahi"
+      },
+      {
+        waktu: "2025-08-26 20:00:00",
+        keterangan: "Selesai Antar. Penerima: Agus Pranoto"
+      }
+    ]
+  }
+};
+    
+    const dummyMonitoring = [
+        { doNumber: "DO-001", bahan: "Buku Matematika", progress: "75%", status: "Pengiriman Parsial" },
+        { doNumber: "DO-002", bahan: "Modul Fisika", progress: "100%", status: "Terkirim Lengkap" },
+        { doNumber: "DO-003", bahan: "Praktikum Web", progress: "30%", status: "Tertunda" }
+    ];
+    
+    const dummyRekap = [
+        { bulan: "Januari 2025", totalBahan: 245, totalTerikirim: 210, pending: 35 },
+        { bulan: "Februari 2025", totalBahan: 320, totalTerikirim: 298, pending: 22 },
+        { bulan: "Maret 2025", totalBahan: 410, totalTerikirim: 387, pending: 23 }
+    ];
+    
+    const dummyHistori = [
+        { tanggal: "2025-03-20", bahan: "Matematika Dasar", qty: 50, total: "Rp 2.500.000" },
+        { tanggal: "2025-03-18", bahan: "Fisika Modern", qty: 30, total: "Rp 3.000.000" },
+        { tanggal: "2025-03-15", bahan: "Pemrograman Web", qty: 40, total: "Rp 4.800.000" }
+    ];
+    
+    // Fungsi untuk render konten berdasarkan halaman
+    function renderPage(page) {
+        const contentDiv = document.getElementById('contentArea');
+        let html = '';
+        
+        switch(page) {
+            case 'bahanajar':
+    html = `
+        <div class="dashboard-card">
+            <h2 class="page-title">
+                <i class="fas fa-book"></i> Informasi Bahan Ajar
+            </h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cover</th>
+                        <th>Kode Lokasi</th>
+                        <th>Kode Barang</th>
+                        <th>Nama Barang</th>
+                        <th>Jenis</th>
+                        <th>Edisi</th>
+                        <th>Stok</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    ${dataBahanAjar.map(item => `
+                        <tr>
+                            <td>
+                                <img 
+                                    src="${item.cover}" 
+                                    alt="${item.namaBarang}"
+                                    style="
+                                        width:60px;
+                                        height:80px;
+                                        object-fit:cover;
+                                        border-radius:10px;
+                                        border:1px solid #e2e8f0;
+                                    "
+                                >
+                            </td>
+
+                            <td>${item.kodeLokasi}</td>
+                            <td>${item.kodeBarang}</td>
+                            <td>${item.namaBarang}</td>
+                            <td>
+                                <span class="badge">
+                                    ${item.jenisBarang}
+                                </span>
+                            </td>
+                            <td>Edisi ${item.edisi}</td>
+
+                            <td>
+                                <span class="badge">
+                                    ${item.stok} pcs
+                                </span>
+                            </td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+
+            <div class="info-placeholder mt-4" style="margin-top:1rem;">
+                Total bahan ajar tersedia:
+                <strong>${dataBahanAjar.length}</strong> item
+            </div>
+        </div>
+    `;
+    break;
+            case 'tracking':
+
+    html = `
+        <div class="dashboard-card">
+            <h2 class="page-title">
+                <i class="fas fa-truck-fast"></i> Tracking Pengiriman
+            </h2>
+
+            <!-- Search -->
+            <div style="margin-bottom:1.5rem;">
+                <input 
+                    type="text" 
+                    id="trackingSearch"
+                    placeholder="Cari nomor DO / nama penerima..."
+                    style="
+                        width:100%;
+                        padding:0.9rem 1rem;
+                        border:1px solid #cbd5e1;
+                        border-radius:1rem;
+                        font-family:'Inter', sans-serif;
+                        font-size:0.95rem;
+                        outline:none;
+                    "
+                >
+            </div>
+
+            <!-- Table -->
+            <div style="overflow-x:auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nomor DO</th>
+                            <th>Nama Penerima</th>
+                            <th>Ekspedisi</th>
+                            <th>Status</th>
+                            <th>Tanggal Kirim</th>
+                            <th>Total</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="trackingTableBody">
+                        ${Object.values(dataTracking).map((item, index) => `
+                            <tr>
+                                <td>${item.nomorDO}</td>
+                                <td>${item.nama}</td>
+                                <td>${item.ekspedisi}</td>
+                                <td>
+                                    <span class="badge">
+                                        ${item.status}
+                                    </span>
+                                </td>
+                                <td>${item.tanggalKirim}</td>
+                                <td>${item.total}</td>
+                                <td>
+                                    <button 
+                                        class="detail-btn"
+                                        onclick="toggleTrackingDetail('detail-${index}')"
+                                        style="
+                                            background:#4f46e5;
+                                            color:white;
+                                            border:none;
+                                            padding:0.55rem 1rem;
+                                            border-radius:0.8rem;
+                                            cursor:pointer;
+                                            font-weight:600;
+                                        "
+                                    >
+                                        Detail
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <!-- Detail -->
+                            <tr id="detail-${index}" style="display:none; background:#f8fafc;">
+                                <td colspan="7">
+                                    <div style="padding:1rem;">
+                                        
+                                        <div style="margin-bottom:1rem;">
+                                            <strong>Paket:</strong> ${item.paket}
+                                        </div>
+
+                                        <div style="
+                                            display:flex;
+                                            flex-direction:column;
+                                            gap:0.8rem;
+                                        ">
+                                            ${item.perjalanan.map(track => `
+                                                <div style="
+                                                    background:white;
+                                                    border:1px solid #e2e8f0;
+                                                    border-radius:0.8rem;
+                                                    padding:0.9rem;
+                                                ">
+                                                    <div style="
+                                                        font-size:0.85rem;
+                                                        color:#64748b;
+                                                        margin-bottom:0.3rem;
+                                                    ">
+                                                        ${track.waktu}
+                                                    </div>
+
+                                                    <div style="
+                                                        color:#1e293b;
+                                                        font-weight:500;
+                                                    ">
+                                                        ${track.keterangan}
+                                                    </div>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+
+                                    </div>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `;
+
+    break;
+            case 'monitoring':
+                html = `
+                    <div class="dashboard-card">
+                        <h2 class="page-title"><i class="fas fa-chart-simple"></i> Monitoring Progress DO Bahan Ajar</h2>
+                        <table>
+                            <thead><tr><th>Nomor DO</th><th>Bahan Ajar</th><th>Progress</th><th>Status</th></tr></thead>
+                            <tbody>
+                                ${dummyMonitoring.map(item => `
+                                    <tr><td>${item.doNumber}</td><td>${item.bahan}</td><td>${item.progress}</td><td>${item.status}</td></tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                break;
+            case 'rekap':
+                html = `
+                    <div class="dashboard-card">
+                        <h2 class="page-title"><i class="fas fa-file-alt"></i> Rekap Bahan Ajar</h2>
+                        <table>
+                            <thead><tr><th>Bulan</th><th>Total Bahan</th><th>Terkirim</th><th>Pending</th></tr></thead>
+                            <tbody>
+                                ${dummyRekap.map(item => `
+                                    <tr><td>${item.bulan}</td><td>${item.totalBahan}</td><td>${item.totalTerikirim}</td><td>${item.pending}</td></tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                break;
+            case 'histori':
+                html = `
+                    <div class="dashboard-card">
+                        <h2 class="page-title"><i class="fas fa-history"></i> Histori Transaksi Bahan Ajar</h2>
+                        <table>
+                            <thead><tr><th>Tanggal</th><th>Bahan Ajar</th><th>Kuantitas</th><th>Total Nilai</th></tr></thead>
+                            <tbody>
+                                ${dummyHistori.map(item => `
+                                    <tr><td>${item.tanggal}</td><td>${item.bahan}</td><td>${item.qty}</td><td>${item.total}</td></tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                break;
+            default:
+                html = `<div class="dashboard-card"><h2 class="page-title">Selamat Datang di Dashboard</h2><p>Silakan pilih menu di samping untuk mengelola bahan ajar.</p></div>`;
+        }
+        contentDiv.innerHTML = html;
+        
+        // Update active class pada sidebar
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            if(btn.getAttribute('data-page') === page) {
+                btn.classList.add('active');
+            } else if(!btn.getAttribute('data-page') && page !== 'monitoring' && page !== 'rekap') {
+                btn.classList.remove('active');
+            }
+        });
+    }
+
+    // Toggle detail tracking
+    function toggleTrackingDetail(id) {
+    const detailRow = document.getElementById(id);
+
+    if (detailRow.style.display === 'none') {
+        detailRow.style.display = 'table-row';
+    } else {
+        detailRow.style.display = 'none';
+    }
+    }
+    
+    // Event listener untuk tombol navigasi utama
+    document.querySelectorAll('.nav-btn[data-page]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const page = btn.getAttribute('data-page');
+            renderPage(page);
+        });
+    });
+    
+    // Submenu laporan
+    // const laporanBtn = document.getElementById('laporanBtn');
+    // const submenu = document.getElementById('laporanSubmenu');
+    // laporanBtn.addEventListener('click', () => {
+    //     submenu.classList.toggle('show');
+    // });
+    
+    // // Submenu buttons
+    // document.querySelectorAll('.submenu-btn').forEach(btn => {
+    //     btn.addEventListener('click', () => {
+    //         const page = btn.getAttribute('data-page');
+    //         renderPage(page);
+    //     });
+    // });
+    
+    // Logout functionality
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+    localStorage.removeItem('isLogin');
+    localStorage.removeItem('currentUserEmail');
+    localStorage.removeItem('currentUserName');
+
+    window.location.href = 'login.html';
+});
+    
+    // Default page (bahan ajar)
+renderPage('bahanajar');
+
+// Search tracking
+document.addEventListener('input', function(e) {
+
+    if (e.target.id === 'trackingSearch') {
+
+        const keyword = e.target.value.toLowerCase();
+
+        const rows = document.querySelectorAll('#trackingTableBody tr');
+
+        rows.forEach(row => {
+
+            if (row.id.includes('detail-')) return;
+
+            const text = row.innerText.toLowerCase();
+
+            if (text.includes(keyword)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+
+                // sembunyikan detail juga
+                const detailRow = row.nextElementSibling;
+
+                if (detailRow && detailRow.id.includes('detail-')) {
+                    detailRow.style.display = 'none';
+                }
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
